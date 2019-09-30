@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% if end == "s" %}
+        <title>{{user.name}}' Quotes Page</title>
+    {% else %}
+        <title>{{user.name}}'s Quotes Page</title>    
+        {% endif %}
+</head>
+<body>
+    <h1>Posts by {{name}}</h1>
+    <h1>Count: {{length}}</h1>
+    {% for x in all_quotes %}
+        <div>
+            <p>{{x.source}}: {{x.content}}</p>
+        </div>
+        {% endfor %}
+</body>
+</html>

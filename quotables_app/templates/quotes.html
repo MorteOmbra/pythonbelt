@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Quotes</title>
+        <style>
+            .quote_box, .fave_box {
+                border: 1px solid black;
+                width: 350px;
+                margin: 20px;
+                display: inline-block;
+            }
+
+            .quote_box {
+                background-image: linear-gradient(45deg, lightyellow, gold)
+            }
+
+            .bottom_links {
+                margin: 10px;
+            }
+
+            #source, #content {
+                font-weight: bold;
+                margin: 10px;
+            }
+
+            .fave_box {
+                background-image: linear-gradient(45deg, blue, pink)
+            }
+
+            a {
+                color: black;
+            }
+
+            #logout {
+                float: right;
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+            {% if messages %}
+                {% for message in messages %}
+                    <li>{{message}}</li>
+                    {% endfor %}
+                {% endif%}
+        </ul>
+        <h1>Hello, {{user.name}}</h1>
+        <h1>Contribute a Quote</h1>
+        <a id="logout" href="/logout">Logout</a>
+        <form action="/add_quote" method="post"> {% csrf_token %}
+            <label for="source">Quoted By: </label><br>
+            <input type="text" name="source" id=""><br>
+            <label for="content">Message: </label><br>
+            <textarea name="content" id="" cols="30" rows="10"></textarea><br><br>
+            <input type="submit" value="Add Quote">
+        </form>
+        <h1>Quotable Quotes</h1>
+        {% for q in quote %}
+            <div class="quote_box"> <!--This is for this user's quotes-->
+                <p id="source">"{{q.content}}"</p>
+                <p id="content">-{{q.source}}</p>
+                <div class="bottom_links">Posted by: <a href="/users/{{q.poster.id}}">{{q.poster.name}}</a></div>
+                <div class="bottom_links">
+                    {% if q.poster.id == user.id %}
+                        <a href="/quotes/{{q.id}}">Edit</a>
+                        <a href="/delete/{{q.id}}">Delete</a>
+                        {% endif %}
+                    <a href="/add_favorite/{{q.id}}">Favorite</a>
+                </div>
+            </div>
+            {% endfor %}
+
+        <h1>Favorite Quotes</h1>
+
+        {% for f in favorite %}
+            <div class="fave_box">
+                <p id="source">"{{f.content}}"</p>
+                <p id="content">-{{f.source}}</p>
+                <div class="bottom_links">Posted by: <a href="/users/{{f.poster.id}}">{{f.poster.name}}</a></div>
+                <div class="bottom_links">
+                    <a href="/remove_favorite/{{f.id}}">Remove</a>
+                </div>
+            </div>
+            {% endfor %}
+    </body>
+</html>
